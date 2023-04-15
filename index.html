@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #books {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        padding: 20px;
+      }
+      .individualBook {
+        width: 23%;
+        padding: 20px;
+        border: 1px solid black;
+        box-shadow: 2px 3px 5px gray;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- <h1 id="adviceHeading">Loading...</h1>
+    <button onclick="stopLoading()">Stop</button> -->
+
+    <!-- 1. Create an input field to read title from the user -->
+    <input type="text" placeholder="Book title here" id="bookTitle" />
+    <!-- 2. Make a button to send request -->
+    <button id="searchButton" onclick="fetchBooks()">Search</button>
+
+    <hr />
+
+    <div id="books"></div>
+
+    <script>
+      function fetchBooks() {
+        // 3. Read the title from the user
+        let bookTitle = document.getElementById("bookTitle").value;
+        console.log(bookTitle);
+        // 4. Create and send the XMLHttpRequest
+        let myRequest = new XMLHttpRequest();
+        myRequest.open(
+          "GET",
+          "https://www.googleapis.com/books/v1/volumes?q=" + bookTitle
+        );
+        myRequest.send();
+
+        // 5. Receive the data from the API
+        myRequest.onreadystatechange = () => {
+          if (myRequest.readyState === 4 && myRequest.status === 200) {
+            let convertedData = JSON.parse(myRequest.responseText);
+            console.log(convertedData);
+            // 6. Display books on the screen
+            let content = convertedData.items
+              .map(
+                (book) =>
+                  `<div class="individualBook">
+                <img src=${book.volumeInfo.imageLinks.thumbnail}/>
+                <h3>${book.volumeInfo.title}</h3>
+                <p>${book.volumeInfo.description}</p>
+                </div>`
+              )
+              .join("");
+            document.getElementById("books").innerHTML = content;
+            document.getElementById("bookTitle").value = "";
+          }
+        };
+      }
+
+      //   let myInterval = setInterval(getAdvice, 3000);
+
+      //   function getAdvice() {
+      //     let myRequest = new XMLHttpRequest(); //readyState=0
+      //     myRequest.open("GET", "https://api.adviceslip.com/advice"); //readyState=1
+      //     myRequest.send(); //readyState=2
+
+      //     // when the server is processing the request, readyState=3
+      //     // after we receive the response, readyState=4
+
+      //     myRequest.onreadystatechange = () => {
+      //       if (myRequest.readyState === 4 && myRequest.status === 200) {
+      //         //work with the data
+      //         let convertedData = JSON.parse(myRequest.responseText);
+      //         document.getElementById("adviceHeading").innerText =
+      //           convertedData.slip.advice;
+      //       } else {
+      //         document.getElementById("adviceHeading").innerText = "Loading...";
+      //       }
+      //     };
+      //   }
+
+      //   function stopLoading() {
+      //     clearInterval(myInterval);
+      //   }
+
+      //   let book = {
+      //     title: "Title of the book",
+      //     description:
+      //       "Enim mollit culpa veniam aliquip duis nulla esse ad tempor. Proident voluptate non duis esse aliquip non. Anim deserunt tempor fugiat elit eiusmod cupidatat est ex sint. Lorem nostrud deserunt officia ea adipisicing minim excepteur ut dolor do sit qui.",
+      //     price: 200,
+      //     isAvailable: false,
+      //     author: { name: "Bob", city: "Mumbai" },
+      //     languages: ["English", "Hindi", "Marathi"],
+      //   };
+
+      //   console.log(book);
+      //   let jsonBook = JSON.stringify(book);
+      //   console.log(jsonBook);
+      //   console.log(JSON.parse(jsonBook));
+
+      //   let jsonAdvice = `{"slip": { "id": 192, "advice": "Don't take it personally."}}`;
+      //   console.log(jsonAdvice);
+      //   let jsAdvice = JSON.parse(jsonAdvice); //convert JSON to JS Object
+      //   jsAdvice.slip.id = 200;
+      //   jsAdvice.slip.comment = "This is new data";
+      //   console.log(jsAdvice);
+      //   let responseData = JSON.stringify(jsAdvice); // convert JS Object to JSON
+      //   console.log(responseData);
+
+      //   var counter = 0;
+
+      //   var myTimeout = setTimeout(sayHello, 5000);
+
+      //   var myInterval = setInterval(incrementCounter, 2000);
+
+      //   function sayHello() {
+      //     console.log("Hello!");
+      //   }
+
+      //   function incrementCounter() {
+      //     counter++;
+      //     console.log(counter);
+      //     if (counter == 10) {
+      //       clearInterval(myInterval);
+      //     }
+      //   }
+
+      //   console.log("Two");
+      //   console.log("Three");
+      //   console.log("Four");
+    </script>
+  </body>
+</html>
